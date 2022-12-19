@@ -74,13 +74,13 @@ const userLogin = async (request, response, next) => {
       where: { phoneNumber },
     });
 
+    if (!checkIfUserExistsByPhoneNumber)
+      throw createError.BadRequest("Invalid credentials!");
+
     const verifyPassword = bcrypt.compareSync(
       password,
       checkIfUserExistsByPhoneNumber.password
     ); // Verify the hashed password and the typed password from user
-
-    if (!checkIfUserExistsByPhoneNumber)
-      throw createError.BadRequest("Invalid credentials!");
 
     if (!verifyPassword) throw createError.BadRequest("Wrong Password...");
 

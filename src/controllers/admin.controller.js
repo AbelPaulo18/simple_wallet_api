@@ -58,13 +58,13 @@ const adminLogin = async (request, response, next) => {
       where: { phoneNumber },
     });
 
+    if (!checkIfAdminExists)
+      throw createError.BadRequest("Invalid credentials!");
+
     const verifyPassword = bcrypt.compareSync(
       password,
       checkIfAdminExists.password
     ); // Verify the hashed password and the typed password from user
-
-    if (!checkIfAdminExists)
-      throw createError.BadRequest("Invalid credentials!");
 
     if (!verifyPassword) throw createError.BadRequest("Wrong Password...");
 
