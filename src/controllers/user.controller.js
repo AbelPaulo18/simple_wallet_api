@@ -76,7 +76,7 @@ const userLogin = async (request, response, next) => {
 
     const verifyPassword = bcrypt.compareSync(
       password,
-      checkIfAdminExists.password
+      checkIfUserExistsByPhoneNumber.password
     ); // Verify the hashed password and the typed password from user
 
     if (!checkIfUserExistsByPhoneNumber)
