@@ -75,4 +75,12 @@ const listAllTransactions = async (request, response, next) => {
   }
 };
 
+const listAllUserTransactions = async (request, response, next) => {
+  try {
+    const { userId } = request.params;
+  } catch (error) {
+    next(error);
+  }
+};
+
 export { executeTransaction, listAllTransactions };

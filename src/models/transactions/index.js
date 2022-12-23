@@ -15,11 +15,7 @@ export const transactionModel = (sequelize, DataTypes) => {
       defaultValue: "Pending",
     },
     accountRecieverID: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    accountSenderID: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     description: {
@@ -28,3 +24,13 @@ export const transactionModel = (sequelize, DataTypes) => {
   });
   return transaction;
 };
+
+/* 
+
+  
+    accountSenderID: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+*/
