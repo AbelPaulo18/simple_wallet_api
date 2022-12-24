@@ -1,4 +1,5 @@
 import createError from "http-errors";
+import { Op } from "sequelize";
 
 import { db } from "../models/index.js";
 import { executeTradeValidation } from "../validation/trade.validation.js";
@@ -39,6 +40,12 @@ const executeTransaction = async (request, response, next) => {
     const senderTotalBalance = checkIfSenderAccountExists.balance - amount;
     const recieverTotalBalance = userAccount.balance + amount;
 
+    if (senderTotalBalance <= 0)
+      return response.status(400).send({
+        message: "Insuficient founds",
+        availableAmount: checkIfSenderAccountExists.balance,
+      });
+
     const addCredit = {
       balance: recieverTotalBalance,
     };
@@ -77,10 +84,27 @@ const listAllTransactions = async (request, response, next) => {
 
 const listAllUserTransactions = async (request, response, next) => {
   try {
-    const { userId } = request.params;
+    const { accountId } = request.params;
+
+    const verifyAccount = await Account.findOne({ where: { id: accountId } });
+
+    if (!verifyAccount) throw createError.BadRequest("Account does not exist!");
+
+    const allUserAccountTransactions = await Transaction.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { accountSenderID: accountId },
+          { accountRecieverID: accountId },
+        ],
+      },
+    });
+
+    response.status(200).send({
+      accountTransactions: allUserAccountTransactions,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-export { executeTransaction, listAllTransactions };
+export { executeTransaction, listAllTransactions, listAllUserTransactions };

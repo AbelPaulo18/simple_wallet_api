@@ -46,11 +46,6 @@ db.accountModel.belongsTo(db.userModel, {
   foreign: "userId",
 });
 
-db.transactionModel.belongsTo(db.accountModel, {
-  constraint: true,
-  foreign: "accountSenderId",
-});
-
 db.tradeModel.belongsTo(db.feesModel, {
   constraint: true,
   foreign: "feesId",
